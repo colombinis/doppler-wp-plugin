@@ -4,6 +4,25 @@ class DPLR_Form_helper
 {
   public static function generate($context, $options = NULL) {
 		
+	$doppler_settings = get_option('dplr_settings');
+	if(!$doppler_settings){
+		?>
+
+		<div style="
+			color: #756e15;
+			background: #fffbd1;
+			border: 1px solid #87803e;
+			padding: 10px;
+			margin: 10px 10px 10px 0px;
+			"
+		>
+			El formulario no se puede mostrar porque la cuenta no esta conectada a Doppler API!
+		</div>
+
+		<?php
+		return;
+	}
+
     $form = $context['form'];
     $fields = isset($context['fields']) ? $context['fields'] : [];
     $form_class = isset($context['classes']) ? implode(" ", $context['classes']) : "";
@@ -34,7 +53,8 @@ class DPLR_Form_helper
 				<?php
 				else:
 				?>
-					<div class="input-field <?php echo isset($field->settings['required']) ? 'required' : ''; ?>">
+					<div class="input-field <?php echo isset($field->settings['required']) ? 'required' : ''; ?>"
+					style="text-align: left;">
 				<?php
 				endif;
 				?>
@@ -75,7 +95,7 @@ class DPLR_Form_helper
 			if($form->settings["form_orientation"] === 'vertical'):
 				if($form->settings['use_consent_field']==='yes'){
 				?>
-				<div class="input-field" style="order:999;" required>
+				<div class="input-field" style="order:999; text-align: left;" required>
 					<input type="checkbox" name="fields-CONSENT" value="true"
 					required/>
 					<?= isset($form->settings['consent_field_text']) && !empty($form->settings['consent_field_text']) ? $form->settings['consent_field_text'] : _e("I've read and accept the privace policy", "doppler-form") ?>
