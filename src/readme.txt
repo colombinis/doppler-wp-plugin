@@ -89,6 +89,15 @@ En [este artículo](https://help.fromdoppler.com/es/api-interfaz-de-programacion
 
 == Changelog ==
 
+= 2.2.7 =
+* update doppler form in front-end doesn't show when doppler account is disconnected
+
+= 2.2.6 =
+* add new feature to change form layout
+
+= 2.2.5 =
+* add new feature to use a doppler form with shortcut tag
+
 = 2.2.4 =
 * fix re-connection issue account
 * fix label showing version user ui
