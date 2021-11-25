@@ -11,7 +11,7 @@ pipeline {
         stage('Siempre se ejecuta') {
             steps {
                 echo "Paso sin condicioinales "
-                echo  'destino branch ${DESTINO_BRANCH}'
+                echo  "destino branch ${DESTINO_BRANCH}"
             }
         }
 
