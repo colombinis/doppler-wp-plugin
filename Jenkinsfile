@@ -8,6 +8,13 @@ pipeline {
     }
     stages {
 
+        stage('Siempre se ejecuta') {
+            steps {
+                echo "Paso sin condicioinales "
+                echo  'destino branch ${DESTINO_BRANCH}'
+            }
+        }
+
         stage('Publish from pull request') {
             when {
                 changeRequest target: 'master'
