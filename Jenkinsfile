@@ -1,63 +1,42 @@
+Permanentemente revisando el repo del plugin https://github.com/MakingSense/doppler-wp-plugin
+
+1-Cuando alguien hace un PR y MERGEA a MASTER branch -> publicar en el servidor por ssh sftp ( plugins.fromdoppler.com)
+permisos necesarios: 
+ - github.com/MakingSense
+ - para subir al filesystem del server plugins.fromdoppler.com
+
+2-Cuando alguien crea un TAG en MASTER -> publicar en el servidor de SVN wordpress
+permisos necesarios: 
+ - github.com/MakingSense
+ - para subir al SVN de wordpress
+
+
 pipeline {
     agent any
+    environment{
+        ORIGEN_REPO = "git@github.com:colombinis/doppler-wp-plugin.git"
+        ORIGEN_BRANCH = "master"
+        DESTINO_REPO = "https://plugins.svn.wordpress.org/doppler-form"
+        DESTINO_BRANCH = "trunk"
+        CURRENT_DIR = $(pwd)
+    }
     stages {
-        stage('Build') {
-            environment{
-                ORIGEN_REPO = "git@github.com:colombinis/doppler-wp-plugin.git"
-                ORIGEN_BRANCH = "master"
-                DESTINO_REPO = "https://plugins.svn.wordpress.org/doppler-form"
-                DESTINO_BRANCH = "trunk"
-                CURRENT_DIR = $(pwd)
+
+        stage('Publish from pull request') {
+            when {
+                changeRequest target: 'master'
             }
             steps {
-                echo "getRepoqa()"
-                sh '''
-                rm -rf repoqa   
-                git clone --branch $ORIGEN_BRANCH --single-branch $ORIGEN_REPO repoqa
-                '''
-
-                echo "getRepoSVN"
-                sh '''
-                #borro porque si existe da error el clone
-                rm -rf reposvn
-                mkdir reposvn
-                #svn co = svn checkout
-                svn co https://plugins.svn.wordpress.org/doppler-form reposvn
-                '''
-
-                echo "updateDestinoFiles()"
-                sh '''
-                #NOTA el source siempre debe terminar con una barra
-                SOURCE="${CURRENT_DIR}/repoqa/src/"
-                #NOTA el target no debe terminar con barra
-                TARGET="${CURRENT_DIR}/reposvn/trunk/"
-                rsync -av --delete --progress --exclude .sass-cache/ $SOURCE $TARGET
-                '''
-
-                echo "pushDestinoBranchSVN"
-                sh '''
-                TARGET="${CURRENT_DIR}/reposvn/"
-                cd $TARGET
-                # rm -rf tags/$NUEVO_TAG
-                # Existe ya la carpeta tag 2.2.6
-                # si entonces solo actualizo los archivos a la carpeta existente
-                # no actuo como ahora svn add?
-
-                FILE="tags/$NUEVO_TAG"
-                if [ -d "$FILE" ] 
-                then
-                    echo "TAG ALREADY EXISTS. $FILE is a directory."
-                    cp -r trunk/* tags/$NUEVO_TAG/
-                else
-                    echo "NEW TAG: Directory $FILE does not exist."
-                    svn cp trunk tags/$NUEVO_TAG
-                    svn add tags/$NUEVO_TAG/* --force
-                    svn add trunk/* --force
-                    echo "Added files."
-                fi
-
-                # svn ci -m "update plugin version ${NUEVO_TAG}" --username $WORDPRESS_USERNAME --password $WORDPRESS_PASSWORD
-                '''
+                echo "Se realizo el PR en el repo:: ${ORIGEN_REPO}"
+            }
+        }
+        
+        stage('Publish from master') {
+            when {
+                branch 'master'
+            }
+            steps {
+                echo "Se realizo MERGE en master "                
             }
         }
     }
