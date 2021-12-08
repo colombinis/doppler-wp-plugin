@@ -20,8 +20,8 @@ pipeline {
                 }
                 stage('Build') {
                     steps {
-                        echo 'Compressing files inside src folder '
-                        sh 'tar zcvf doppler-plugin.tar.gz ./src'
+                        echo 'Compressing files inside src folder without include src '
+                        sh 'tar zcvf doppler-plugin.tar.gz -C ./src .'
                         archiveArtifacts artifacts: 'doppler-plugin.tar.gz'
                     }
                 }
@@ -30,18 +30,22 @@ pipeline {
                         sh '''
                         echo Getting plugins.fromdoppler.com server IP (access inside vpn)
                         export IP=167.172.28.50
-                        echo "Removing deployment folder and old artifact if existst"
-                        ssh -o "StrictHostKeyChecking=no" scolombini@$IP 'rm -rf ~/deployment/ ~/doppler-plugin.tar.gz'
+                        export USER=scolombini
+                        export REMOTE_PRIVATEUSERKEY=~/.ssh/id_rsa_doppler_plugins
+                        export REMOTE_PORT=2200
+                        export DEPLOYMENT=/home/$USER/deployment
+                        echo "Removing old artifact if existst"
+                        ssh -o "StrictHostKeyChecking=no" -i $REMOTE_PRIVATEUSERKEY $USER@$IP -p $REMOTE_PORT 'rm -rf $DEPLOYMENT/*'
                         echo Copy build artifact to server
-                        scp -o "StrictHostKeyChecking=no" doppler-plugin.tar.gz scolombini@$IP:~/
-                        echo "Create deployment folder"
-                        ssh -o "StrictHostKeyChecking=no" scolombini@$IP 'mkdir ~/deployment/'
+                        scp -o "StrictHostKeyChecking=no" -i $REMOTE_PRIVATEUSERKEY -P $REMOTE_PORT doppler-plugin.tar.gz $USER@$IP:$DEPLOYMENT/
                         echo "Extract build artifact"
-                        ssh -o "StrictHostKeyChecking=no" scolombini@$IP 'tar zxvf doppler-plugin.tar.gz -C ~/deployment/'
+                        ssh -o "StrictHostKeyChecking=no" -i $REMOTE_PRIVATEUSERKEY $USER@$IP -p $REMOTE_PORT 'tar zxvf $DEPLOYMENT/doppler-plugin.tar.gz -C $DEPLOYMENT/'
+                        echo "remove compress artifact"
+                        ssh -o "StrictHostKeyChecking=no" -i $REMOTE_PRIVATEUSERKEY $USER@$IP -p $REMOTE_PORT 'rm  $DEPLOYMENT/doppler-plugin.tar.gz'
                         echo Copy files on the deployment folder
-                        ssh -o "StrictHostKeyChecking=no" scolombini@$IP \'sudo cp -rfv deployment/* /home/sftp/www/html/_shared\'
+                        ssh -o "StrictHostKeyChecking=no" -i $REMOTE_PRIVATEUSERKEY $USER@$IP -p $REMOTE_PORT 'sudo mv $DEPLOYMENT/* /home/sftp/www/html/_shared'
                         echo Change ownership of files
-                        ssh -o "StrictHostKeyChecking=no" scolombini@$IP \'sudo chown -R www:www-data /home/sftp/www/html/_shared\'
+                        ssh -o "StrictHostKeyChecking=no" -i $REMOTE_PRIVATEUSERKEY $USER@$IP -p $REMOTE_PORT 'sudo chown -R www:www-data /home/sftp/www/html/_shared'
                         '''
                     }
                 }
@@ -60,6 +64,7 @@ pipeline {
                         echo TODO get files from svn
                         echo TODO get files from github
                         echo TODO update files from github to svn
+                        echo "el tag encontrado Building $TAG_NAME"
                         '''
                     }
                 }
