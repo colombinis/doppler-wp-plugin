@@ -5,7 +5,7 @@ Tags: Doppler, Email marketing, integration, subscription, form, automation
 Requires at least: 4.9
 Tested up to: 5.7
 Requires PHP: 5.6.4
-Stable tag: 2.2.4
+Stable tag: 2.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
