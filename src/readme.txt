@@ -3,7 +3,7 @@ Contributors: fromdoppler
 Donate link: --
 Tags: Doppler, Email marketing, integration, subscription, form, automation
 Requires at least: 4.9
-Tested up to: 5.7
+Tested up to: 5.8.2
 Requires PHP: 5.6.4
 Stable tag: 2.2.7
 License: GPLv2 or later

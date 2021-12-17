@@ -29,7 +29,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-if( !defined('DOPPLER_FORM_VERSION') ) define( 'DOPPLER_FORM_VERSION', '2.2.4' );
+if( !defined('DOPPLER_FORM_VERSION') ) define( 'DOPPLER_FORM_VERSION', '2.2.7' );
 if( !defined('WP_DEBUG_LOG_DOPPLER_PLUGINS') ) define( 'WP_DEBUG_LOG_DOPPLER_PLUGINS', false );
 
 if( !defined('DOPPLER_PLUGINS_PATH') ) define('DOPPLER_PLUGINS_PATH', plugin_dir_path(__DIR__));
