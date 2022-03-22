@@ -114,7 +114,7 @@
 
 						<label><?php _e('Username', 'doppler-form');?></label>
 
-						<input class="validation"  id="user-account" data-validation-email="<?php _e("Ouch! Enter a valid Email.", "doppler-form"); ?>"
+						<input class="validation visible"  id="user-account" data-validation-email="<?php _e("Ouch! Enter a valid Email.", "doppler-form"); ?>"
 							<?= isset($errorMessages['user_account']) ? "data-validation-fixed='".$errorMessages['user_account']."'" : "";?>
 							type="text"
 							placeholder=""
@@ -145,6 +145,7 @@
 						<input id="api-key"
 							data-validation-required="<?php _e("Ouch! The field is empty.", "doppler-form"); ?>" <?= isset($errorMessages['api_key']) ? "data-validation-fixed='".$errorMessages['api_key']."'" : "";?>
 							data-validation="noempty"
+							class="visible"
 							type="text"
 							placeholder=""
 							name="dplr_settings[dplr_option_apikey];"
@@ -156,7 +157,7 @@
 						</div>
 					</div>
 
-					<button class="dp-button button-medium primary-green">
+					<button class="dp-button button-medium primary-green visible">
 						<?php _e("Connect", "doppler-form"); ?>
 					</button>
 
@@ -176,7 +177,7 @@
 
 		</div>
 
-		<p class="margin-auto">
+		<p class="margin-auto visible">
 				<?php _e("Do you have any doubts about how to connect your Forms with Doppler? Press", "doppler-form")?>
 				<?php echo  '<a href="'.__('https://help.fromdoppler.com/en/how-to-integrate-wordpress-forms-with-doppler?utm_source=landing&utm_medium=integracion&utm_campaign=wordpress','doppler-form').'" target="blank">'.__('HELP','doppler-form').'</a>'?>.
 		</p>

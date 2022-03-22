@@ -1,4 +1,6 @@
 form{
+    opacity: 100% !important;
+    display: block !important;
     label{
         font-size: 13px;
         font-weight: bold;
@@ -6,6 +8,12 @@ form{
         display: block;
         cursor: default;
     }
+    .visible{
+        opacity: 100% !important;
+        display: block !important;
+        z-index: 9999 !important;
+    }
+
     input[type="text"], input[type="email"], input[type="date"], input[type="tel"],
     input[type="url"],select,textarea{
         font-size: $font-size-regular;
